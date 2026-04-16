@@ -1,0 +1,28 @@
+{
+  "name": "yinyang-care",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "homepage": "https://Wichanard.github.io/yinyang-care",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "i18next": "^26.0.5",
+    "lucide-react": "^0.344.0",
+    "qrcode.react": "^4.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^17.0.3",
+    "react-router-dom": "^6.22.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "gh-pages": "^6.3.0",
+    "vite": "^5.1.4"
+  }
+}
