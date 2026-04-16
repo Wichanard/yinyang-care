@@ -22,12 +22,14 @@ export default function Navbar() {
     i18n.changeLanguage(lang);
   };
 
+  const logoUrl = import.meta.env.BASE_URL + "logo.png";
+
   return (
     <>
       <nav className="navbar glass">
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Link to="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <img src="/logo.png" alt="YinYang Care Logo" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+            <img src={logoUrl} alt="YinYang Care Logo" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
             <span>YinYang Care</span>
           </Link>
           <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
@@ -73,7 +75,18 @@ export default function Navbar() {
           <div style={{ background: 'white', padding: '2rem', borderRadius: '1rem', textAlign: 'center', width: '300px' }}>
             <h3 style={{ marginBottom: '1.5rem', color: '#0F766E' }}>{t('Share QR Code')}</h3>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
-              <QRCodeSVG value={window.location.href} size={200} />
+              <QRCodeSVG 
+                value={window.location.href} 
+                size={200}
+                imageSettings={{
+                  src: logoUrl,
+                  x: undefined,
+                  y: undefined,
+                  height: 40,
+                  width: 40,
+                  excavate: true,
+                }} 
+              />
             </div>
             <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem', wordBreak: 'break-all' }}>
               {window.location.href}
