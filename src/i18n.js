@@ -1,7 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-// Persist language
 const savedLanguage = localStorage.getItem('yinyang_language') || 'th';
 
 const resources = {
@@ -27,7 +26,21 @@ const resources = {
       "Recommended": "ศูนย์ดูแลพรีเมียมแนะนำ",
       "Starting from": "เริ่มต้นที่",
       "View Details": "ดูรายละเอียด",
-      "day": "วัน"
+      "day": "วัน",
+      "Filters": "ตัวกรอง",
+      "Price Range": "ช่วงราคา",
+      "Sort by": "เรียงตาม",
+      "Providers found": "ผู้ให้บริการในพื้นที่ของคุณ",
+      "Email": "อีเมล",
+      "Password": "รหัสผ่าน",
+      "Full Name": "ชื่อ-นามสกุล",
+      "Sign Up": "สมัครสมาชิก",
+      "Don't have an account?": "ยังไม่มีบัญชีใช่หรือไม่?",
+      "Already have an account?": "มีบัญชีอยู่แล้วใช่หรือไม่?",
+      "Check In": "วันที่เข้า",
+      "Check Out": "วันที่ออก",
+      "Cancel Booking": "ยกเลิกการจอง",
+      "Contact Provider": "ติดต่อศูนย์ดูแล"
     }
   },
   en: {
@@ -52,7 +65,21 @@ const resources = {
       "Recommended": "Recommended Premium Centers",
       "Starting from": "Starting from",
       "View Details": "View Details",
-      "day": "day"
+      "day": "day",
+      "Filters": "Filters",
+      "Price Range": "Price Range",
+      "Sort by": "Sort by",
+      "Providers found": "Providers found near you",
+      "Email": "Email",
+      "Password": "Password",
+      "Full Name": "Full Name",
+      "Sign Up": "Sign Up",
+      "Don't have an account?": "Don't have an account?",
+      "Already have an account?": "Already have an account?",
+      "Check In": "Check In",
+      "Check Out": "Check Out",
+      "Cancel Booking": "Cancel Booking",
+      "Contact Provider": "Contact Provider"
     }
   },
   zh: {
@@ -77,7 +104,21 @@ const resources = {
       "Recommended": "推荐的高级护理中心",
       "Starting from": "起价",
       "View Details": "查看详情",
-      "day": "天"
+      "day": "天",
+      "Filters": "过滤器",
+      "Price Range": "价格范围",
+      "Sort by": "排序方式",
+      "Providers found": "附近找到的服务提供商",
+      "Email": "电子邮件",
+      "Password": "密码",
+      "Full Name": "全名",
+      "Sign Up": "注册",
+      "Don't have an account?": "没有帐户？",
+      "Already have an account?": "已经有帐户？",
+      "Check In": "入住日期",
+      "Check Out": "退房日期",
+      "Cancel Booking": "取消预订",
+      "Contact Provider": "联系服务提供商"
     }
   }
 };

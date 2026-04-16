@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Filter, Star } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function SearchResults() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className="container" style={{ padding: '2rem 1.5rem', display: 'flex', gap: '2rem' }}>
@@ -11,11 +13,11 @@ export default function SearchResults() {
         <div className="card" style={{ padding: '1.5rem', position: 'sticky', top: '100px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
             <Filter size={20} color="var(--primary)" />
-            <h3 className="outfit-font" style={{ fontSize: '1.25rem' }}>Filters</h3>
+            <h3 className="outfit-font" style={{ fontSize: '1.25rem' }}>{t('Filters')}</h3>
           </div>
           
           <div style={{ marginBottom: '1.5rem' }}>
-            <h4 style={{ marginBottom: '0.75rem', fontWeight: 600 }}>Price Range</h4>
+            <h4 style={{ marginBottom: '0.75rem', fontWeight: 600 }}>{t('Price Range')}</h4>
             <input type="range" style={{ width: '100%' }} />
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
               <span>฿500</span>
@@ -24,8 +26,8 @@ export default function SearchResults() {
           </div>
 
           <div style={{ marginBottom: '1.5rem' }}>
-            <h4 style={{ marginBottom: '0.75rem', fontWeight: 600 }}>Service Type</h4>
-            {['Nursing Home', 'Home Care', 'Physical Therapy'].map(type => (
+            <h4 style={{ marginBottom: '0.75rem', fontWeight: 600 }}>{t('Service Type')}</h4>
+            {[t('Nursing Home'), t('Home Care'), t('Physical Therapy')].map(type => (
               <label key={type} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                 <input type="checkbox" /> {type}
               </label>
@@ -37,9 +39,9 @@ export default function SearchResults() {
       {/* Results List */}
       <main style={{ flex: 1 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-          <h2 className="outfit-font" style={{ fontSize: '1.5rem' }}>14 Providers found near your location</h2>
+          <h2 className="outfit-font" style={{ fontSize: '1.5rem' }}>14 {t('Providers found')}</h2>
           <select className="input-field" style={{ padding: '0.5rem 1rem' }}>
-            <option>Sort by: Recommended</option>
+            <option>{t('Sort by')}: {t('Recommended')}</option>
             <option>Price: Low to High</option>
             <option>Rating: High to Low</option>
           </select>
@@ -54,7 +56,7 @@ export default function SearchResults() {
                   <div>
                     <h3 className="outfit-font" style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '0.25rem' }}>Baan Rak Care Center</h3>
                     <p style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem', marginBottom: '1rem' }}>
-                      <MapPin size={16} /> 2.5 km from your location
+                      <MapPin size={16} /> 2.5 km
                     </p>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', background: '#fef3c7', color: '#d97706', padding: '0.25rem 0.5rem', borderRadius: '0.25rem', fontWeight: 600 }}>
@@ -69,9 +71,9 @@ export default function SearchResults() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
                   <div>
                     <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--primary)' }}>฿1,800</span>
-                    <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>/day</span>
+                    <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>/{t('day')}</span>
                   </div>
-                  <button className="btn btn-primary" onClick={() => navigate('/provider/1')}>View Details</button>
+                  <button className="btn btn-primary" onClick={() => navigate('/provider/1')}>{t('View Details')}</button>
                 </div>
               </div>
             </div>

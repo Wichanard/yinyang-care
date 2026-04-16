@@ -4,6 +4,7 @@ import { User, LogOut, QrCode, Globe } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { QRCodeSVG } from 'qrcode.react';
+import logoUrl from '../assets/logo.png';
 
 export default function Navbar() {
   const { currentUser, logout } = useAuth();
@@ -21,8 +22,6 @@ export default function Navbar() {
     localStorage.setItem('yinyang_language', lang);
     i18n.changeLanguage(lang);
   };
-
-  const logoUrl = import.meta.env.BASE_URL + "logo.png";
 
   return (
     <>
