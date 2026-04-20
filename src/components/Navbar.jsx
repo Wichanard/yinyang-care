@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, LogOut, QrCode, Globe } from 'lucide-react';
+import { User, LogOut, QrCode, Globe, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { QRCodeSVG } from 'qrcode.react';
@@ -32,6 +32,9 @@ export default function Navbar() {
             <span>YinYang Care</span>
           </Link>
           <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+            <Link to="/chat-support" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#4285f4', fontWeight: '600' }}>
+              <Sparkles size={18} /> ปรึกษา AI
+            </Link>
             <Link to="/search">{t('Find Care')}</Link>
             
             {currentUser ? (

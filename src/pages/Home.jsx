@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Search, MapPin, Calendar, Activity } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { clinics } from '../data/clinics';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -78,25 +79,60 @@ export default function Home() {
           {t('Recommended')}
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem' }}>
-          {[1, 2, 3].map(item => (
-            <div key={item} className="card">
-              <img src={`https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80`} alt="Facility" style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+          {clinics.slice(0, 8).map(clinic => (
+            <div 
+              key={clinic.id} 
+              className="card"
+              onClick={() => navigate('/clinic-profile')}
+              style={{ 
+                cursor: 'pointer',
+                transition: 'transform 0.3s, box-shadow 0.3s',
+                overflow: 'hidden'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'translateY(-8px)';
+                e.currentTarget.style.boxShadow = '0 12px 24px rgba(0,0,0,0.1)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              <img src={clinic.image} alt={clinic.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
               <div style={{ padding: '1.5rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                  <h3 className="outfit-font" style={{ fontSize: '1.25rem', fontWeight: 600 }}>Sunrise Senior Living</h3>
+                  <h3 className="outfit-font" style={{ fontSize: '1.25rem', fontWeight: 600 }}>{clinic.name}</h3>
                   <div style={{ background: '#fef3c7', color: '#d97706', padding: '0.25rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.875rem', fontWeight: 600 }}>
-                    ★ 4.9
+                    ★ {clinic.rating}
                   </div>
                 </div>
-                <p style={{ color: 'var(--text-muted)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                  <MapPin size={16} /> Sukhumvit, Bangkok
-                </p>
+                <a 
+                  href={clinic.mapUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  style={{ 
+                    color: 'var(--text-muted)', 
+                    marginBottom: '1rem', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '0.25rem',
+                    textDecoration: 'none'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.color = 'var(--primary)'}
+                  onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
+                >
+                  <MapPin size={16} /> {clinic.location}
+                </a>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
                   <div>
                     <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>{t('Starting from')}</p>
-                    <p style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--primary)' }}>฿1,500<span style={{ fontSize: '0.875rem', fontWeight: 400, color: 'var(--text-muted)' }}>/{t('day')}</span></p>
+                    <p style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--primary)' }}>฿{clinic.price.toLocaleString()}<span style={{ fontSize: '0.875rem', fontWeight: 400, color: 'var(--text-muted)' }}>/{t('day')}</span></p>
                   </div>
-                  <button onClick={() => navigate('/provider/1')} className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>{t('View Details')}</button>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>{t('View Details')}</button>
+                    <button className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>Profile</button>
+                  </div>
                 </div>
               </div>
             </div>
