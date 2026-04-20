@@ -1,13 +1,846 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YinYang Care - Senior Care Platform</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yinyang Care - TCM Clinic Marketplace</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --primary-orange: #ea580c;
+            --dark-orange: #d64c0a;
+            --light-orange: #f5ede4;
+        }
+        
+        * {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #fafafa;
+            overflow-x: hidden;
+        }
+        
+        .main-content {
+            padding-bottom: 80px;
+        }
+        
+        /* Bottom Navigation Fixed Positioning */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            z-index: 50;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-item {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .nav-item.active {
+            color: var(--primary-orange);
+        }
+        
+        .nav-item:hover {
+            color: var(--primary-orange);
+            transform: translateY(-2px);
+        }
+        
+        /* Clinic Card Animations */
+        .clinic-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .clinic-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .clinic-image {
+            height: 180px;
+            background: linear-gradient(135deg, var(--light-orange) 0%, #ffe8d6 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .clinic-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Filter Pills */
+        .filter-pill {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 20px;
+            white-space: nowrap;
+            border: 2px solid #e5e7eb;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .filter-pill:hover {
+            border-color: var(--primary-orange);
+            color: var(--primary-orange);
+        }
+        
+        .filter-pill.active {
+            background-color: var(--primary-orange);
+            color: white;
+            border-color: var(--primary-orange);
+        }
+        
+        /* Search Bar */
+        .search-input {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px 16px;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary-orange);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--dark-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(234, 88, 12, 0.3);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-orange);
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: 2px solid var(--primary-orange);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--light-orange);
+        }
+        
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-confirmed {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-completed {
+            background-color: #e0e7ff;
+            color: #3730a3;
+        }
+        
+        /* Verified Badge */
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background-color: #dcfce7;
+            color: #166534;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Rating Stars */
+        .stars {
+            color: #fbbf24;
+            font-size: 14px;
+        }
+        
+        /* Input Fields */
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+        }
+        
+        /* Responsive Text */
+        @media (max-width: 640px) {
+            .header-title {
+                font-size: 24px;
+            }
+            
+            .section-title {
+                font-size: 18px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .main-content {
+                padding-bottom: 0;
+            }
+            
+            .bottom-nav {
+                position: relative;
+            }
+        }
+        
+        /* Appointment Card */
+        .appointment-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+            background: white;
+            transition: all 0.3s ease;
+            margin-bottom: 12px;
+        }
+        
+        .appointment-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Main Content Container -->
+    <div class="main-content">
+        
+        <!-- ==================== HEADER SECTION ==================== -->
+        <header class="bg-white sticky top-0 z-40 shadow-sm">
+            <div class="max-w-md mx-auto px-4 py-4">
+                <!-- Logo & Title -->
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-yin-yang text-white text-lg"></i>
+                    </div>
+                    <h1 class="header-title text-2xl font-bold text-gray-900">Yinyang Care</h1>
+                </div>
+                
+                <!-- Search Bar -->
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        placeholder="Search clinics or symptoms (e.g., Office Syndrome)..." 
+                        class="search-input pl-12"
+                        id="searchInput"
+                    >
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- ==================== FILTER/HERO SECTION ==================== -->
+        <section class="bg-gradient-to-b from-orange-50 to-white py-6">
+            <div class="max-w-md mx-auto px-4">
+                <p class="text-sm text-gray-600 mb-4">Popular Treatments:</p>
+                <div class="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+                    <button class="filter-pill active" data-filter="all">
+                        <i class="fas fa-wand-magic-sparkles mr-2"></i>All
+                    </button>
+                    <button class="filter-pill" data-filter="acupuncture">
+                        <i class="fas fa-needle mr-2"></i>Acupuncture (ฝังเข็ม)
+                    </button>
+                    <button class="filter-pill" data-filter="cupping">
+                        <i class="fas fa-circle mr-2"></i>Cupping (ครอบแก้ว)
+                    </button>
+                    <button class="filter-pill" data-filter="guasha">
+                        <i class="fas fa-hand mr-2"></i>Gua Sha (กัวซา)
+                    </button>
+                    <button class="filter-pill" data-filter="herbal">
+                        <i class="fas fa-leaf mr-2"></i>Herbal Medicine
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== CLINIC LISTING SECTION ==================== -->
+        <section class="py-6">
+            <div class="max-w-md mx-auto px-4">
+                <h2 class="section-title text-xl font-bold text-gray-900 mb-4">Featured Clinics</h2>
+                
+                <!-- Clinic Cards Container -->
+                <div class="space-y-4" id="clinicsContainer">
+                    <!-- Clinic Card 1 -->
+                    <div class="clinic-card bg-white shadow-sm border border-gray-100">
+                        <div class="clinic-image">
+                            <div class="w-full h-full bg-gradient-to-br from-orange-300 via-orange-200 to-red-200 flex items-center justify-center">
+                                <i class="fas fa-hospital text-orange-600 text-4xl opacity-30"></i>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-gray-900">Yinyang Clinic</h3>
+                                <div class="verified-badge">
+                                    <i class="fas fa-check-circle"></i>
+                                    Verified
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-1 mb-2">
+                                <span class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </span>
+                                <span class="text-sm text-gray-600">(4.5) 248 reviews</span>
+                            </div>
+                            
+                            <p class="text-sm text-gray-600 mb-3 flex items-center gap-2">
+                                <i class="fas fa-map-pin text-orange-600"></i>
+                                Sukhumvit Rd, Bangkok · 2.3 km away
+                            </p>
+                            
+                            <div class="flex gap-2">
+                                <p class="text-xs text-gray-500">Treatments:</p>
+                                <div class="flex gap-1 flex-wrap">
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full">Acupuncture</span>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full">Herbal</span>
+                                </div>
+                            </div>
+                            
+                            <button class="btn-primary w-full mt-4">View Details</button>
+                        </div>
+                    </div>
+
+                    <!-- Clinic Card 2 -->
+                    <div class="clinic-card bg-white shadow-sm border border-gray-100">
+                        <div class="clinic-image">
+                            <div class="w-full h-full bg-gradient-to-br from-orange-300 via-orange-200 to-red-200 flex items-center justify-center">
+                                <i class="fas fa-stethoscope text-orange-600 text-4xl opacity-30"></i>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-gray-900">Traditional Healing Hub</h3>
+                                <div class="verified-badge">
+                                    <i class="fas fa-check-circle"></i>
+                                    Verified
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-1 mb-2">
+                                <span class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </span>
+                                <span class="text-sm text-gray-600">(5.0) 156 reviews</span>
+                            </div>
+                            
+                            <p class="text-sm text-gray-600 mb-3 flex items-center gap-2">
+                                <i class="fas fa-map-pin text-orange-600"></i>
+                                Silom, Bangkok · 1.8 km away
+                            </p>
+                            
+                            <div class="flex gap-2">
+                                <p class="text-xs text-gray-500">Treatments:</p>
+                                <div class="flex gap-1 flex-wrap">
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full">Cupping</span>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full">Gua Sha</span>
+                                </div>
+                            </div>
+                            
+                            <button class="btn-primary w-full mt-4">View Details</button>
+                        </div>
+                    </div>
+
+                    <!-- Clinic Card 3 -->
+                    <div class="clinic-card bg-white shadow-sm border border-gray-100">
+                        <div class="clinic-image">
+                            <div class="w-full h-full bg-gradient-to-br from-orange-300 via-orange-200 to-red-200 flex items-center justify-center">
+                                <i class="fas fa-leaf text-orange-600 text-4xl opacity-30"></i>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-gray-900">Wellness Balance Clinic</h3>
+                                <div class="verified-badge">
+                                    <i class="fas fa-check-circle"></i>
+                                    Verified
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-1 mb-2">
+                                <span class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </span>
+                                <span class="text-sm text-gray-600">(4.2) 89 reviews</span>
+                            </div>
+                            
+                            <p class="text-sm text-gray-600 mb-3 flex items-center gap-2">
+                                <i class="fas fa-map-pin text-orange-600"></i>
+                                Phrom Phong, Bangkok · 3.5 km away
+                            </p>
+                            
+                            <div class="flex gap-2">
+                                <p class="text-xs text-gray-500">Treatments:</p>
+                                <div class="flex gap-1 flex-wrap">
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full">Acupuncture</span>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full">Herbal</span>
+                                </div>
+                            </div>
+                            
+                            <button class="btn-primary w-full mt-4">View Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== MY APPOINTMENTS SECTION ==================== -->
+        <section class="py-6">
+            <div class="max-w-md mx-auto px-4">
+                <h2 class="section-title text-xl font-bold text-gray-900 mb-4">My Appointments</h2>
+                
+                <!-- Appointment Cards -->
+                <div id="appointmentsContainer">
+                    <!-- Appointment Card 1 - Pending -->
+                    <div class="appointment-card">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="font-bold text-gray-900">Yinyang Clinic</h3>
+                                <p class="text-sm text-gray-600">Acupuncture Treatment</p>
+                            </div>
+                            <span class="status-badge status-pending">Pending</span>
+                        </div>
+                        
+                        <div class="space-y-2 mb-3 text-sm text-gray-600">
+                            <p class="flex items-center gap-2">
+                                <i class="fas fa-calendar text-orange-600 w-4"></i>
+                                April 25, 2026 at 2:00 PM
+                            </p>
+                            <p class="flex items-center gap-2">
+                                <i class="fas fa-map-pin text-orange-600 w-4"></i>
+                                Sukhumvit Rd, Bangkok
+                            </p>
+                            <p class="flex items-center gap-2">
+                                <i class="fas fa-user text-orange-600 w-4"></i>
+                                Dr. Somchai Wellness
+                            </p>
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <button class="btn-primary text-sm flex-1">Confirm</button>
+                            <button class="btn-secondary text-sm flex-1">Cancel</button>
+                        </div>
+                    </div>
+
+                    <!-- Appointment Card 2 - Confirmed -->
+                    <div class="appointment-card">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="font-bold text-gray-900">Traditional Healing Hub</h3>
+                                <p class="text-sm text-gray-600">Cupping & Gua Sha Session</p>
+                            </div>
+                            <span class="status-badge status-confirmed">Confirmed</span>
+                        </div>
+                        
+                        <div class="space-y-2 mb-3 text-sm text-gray-600">
+                            <p class="flex items-center gap-2">
+                                <i class="fas fa-calendar text-orange-600 w-4"></i>
+                                April 22, 2026 at 10:30 AM
+                            </p>
+                            <p class="flex items-center gap-2">
+                                <i class="fas fa-map-pin text-orange-600 w-4"></i>
+                                Silom, Bangkok
+                            </p>
+                            <p class="flex items-center gap-2">
+                                <i class="fas fa-user text-orange-600 w-4"></i>
+                                Dr. Niran Traditional
+                            </p>
+                        </div>
+                        
+                        <button class="btn-secondary text-sm w-full">View Details</button>
+                    </div>
+
+                    <!-- Appointment Card 3 - Completed -->
+                    <div class="appointment-card opacity-75">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="font-bold text-gray-900">Wellness Balance Clinic</h3>
+                                <p class="text-sm text-gray-600">Herbal Medicine Consultation</p>
+                            </div>
+                            <span class="status-badge status-completed">Completed</span>
+                        </div>
+                        
+                        <div class="space-y-2 mb-3 text-sm text-gray-600">
+                            <p class="flex items-center gap-2">
+                                <i class="fas fa-calendar text-orange-600 w-4"></i>
+                                April 18, 2026 at 3:00 PM
+                            </p>
+                            <p class="flex items-center gap-2">
+                                <i class="fas fa-map-pin text-orange-600 w-4"></i>
+                                Phrom Phong, Bangkok
+                            </p>
+                            <p class="flex items-center gap-2">
+                                <i class="fas fa-user text-orange-600 w-4"></i>
+                                Dr. Pranee Wellness
+                            </p>
+                        </div>
+                        
+                        <button class="btn-secondary text-sm w-full">Leave Review</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== BOOKING MODAL SECTION ==================== -->
+        <div class="modal" id="bookingModal">
+            <div class="modal-content w-full md:w-96 p-6">
+                <!-- Modal Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Book Appointment</h2>
+                    <button class="text-gray-500 hover:text-gray-900 text-2xl" id="closeModalBtn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Booking Form -->
+                <form id="bookingForm" class="space-y-4">
+                    <!-- Clinic Selection -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-900 mb-2">Select Clinic</label>
+                        <select class="form-input" required>
+                            <option value="">Choose a clinic...</option>
+                            <option value="yinyang">Yinyang Clinic</option>
+                            <option value="healing">Traditional Healing Hub</option>
+                            <option value="wellness">Wellness Balance Clinic</option>
+                        </select>
+                    </div>
+
+                    <!-- Service Selection -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-900 mb-2">Service Type</label>
+                        <select class="form-input" required>
+                            <option value="">Select a service...</option>
+                            <option value="acupuncture">Acupuncture - ฝังเข็ม (฿600)</option>
+                            <option value="cupping">Cupping - ครอบแก้ว (฿500)</option>
+                            <option value="guasha">Gua Sha - กัวซา (฿450)</option>
+                            <option value="herbal">Herbal Medicine (฿400)</option>
+                            <option value="combo">Combo Package (฿999)</option>
+                        </select>
+                    </div>
+
+                    <!-- Pre-screening Section -->
+                    <div class="border-t pt-4">
+                        <p class="text-sm font-semibold text-gray-900 mb-3">Pre-screening Information</p>
+                        
+                        <!-- Weight -->
+                        <div class="mb-3">
+                            <label class="block text-sm text-gray-700 mb-1">Weight (kg)</label>
+                            <input 
+                                type="number" 
+                                step="0.1" 
+                                placeholder="e.g., 70" 
+                                class="form-input"
+                            >
+                        </div>
+
+                        <!-- Height -->
+                        <div class="mb-3">
+                            <label class="block text-sm text-gray-700 mb-1">Height (cm)</label>
+                            <input 
+                                type="number" 
+                                step="0.1" 
+                                placeholder="e.g., 175" 
+                                class="form-input"
+                            >
+                        </div>
+
+                        <!-- Symptoms -->
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-1">Symptoms / Concerns</label>
+                            <textarea 
+                                class="form-input" 
+                                rows="4" 
+                                placeholder="Describe your symptoms or health concerns (e.g., Office Syndrome, back pain, stress)..."
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Appointment Date/Time -->
+                    <div class="border-t pt-4">
+                        <div class="mb-3">
+                            <label class="block text-sm font-semibold text-gray-900 mb-2">Preferred Date</label>
+                            <input 
+                                type="date" 
+                                class="form-input"
+                                required
+                            >
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-900 mb-2">Preferred Time</label>
+                            <input 
+                                type="time" 
+                                class="form-input"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Price Display -->
+                    <div class="bg-orange-50 border-2 border-orange-200 rounded-lg p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-gray-600">Estimated Price:</span>
+                            <span class="text-2xl font-bold text-orange-600">฿600</span>
+                        </div>
+                        <p class="text-xs text-gray-500">Price may vary based on doctor availability</p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-3 pt-4">
+                        <button 
+                            type="button" 
+                            class="btn-secondary flex-1"
+                            id="cancelBookingBtn"
+                        >
+                            Cancel
+                        </button>
+                        <button 
+                            type="submit" 
+                            class="btn-primary flex-1"
+                        >
+                            <i class="fas fa-check mr-2"></i>Confirm Booking
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== BOTTOM NAVIGATION BAR (FIXED) ==================== -->
+    <nav class="bottom-nav md:border-t md:position-static md:bg-white">
+        <div class="max-w-md mx-auto">
+            <div class="flex justify-around items-center h-20 md:h-auto md:py-4">
+                <!-- Home -->
+                <button class="nav-item active flex flex-col items-center justify-center h-full md:h-auto md:py-2 text-gray-600 hover:text-orange-600 transition-colors" data-nav="home" title="Home">
+                    <i class="fas fa-home text-2xl md:text-lg"></i>
+                    <span class="text-xs mt-1 md:mt-2">Home</span>
+                </button>
+
+                <!-- Search -->
+                <button class="nav-item flex flex-col items-center justify-center h-full md:h-auto md:py-2 text-gray-600 hover:text-orange-600 transition-colors" data-nav="search" title="Search">
+                    <i class="fas fa-search text-2xl md:text-lg"></i>
+                    <span class="text-xs mt-1 md:mt-2">Search</span>
+                </button>
+
+                <!-- Appointments -->
+                <button class="nav-item flex flex-col items-center justify-center h-full md:h-auto md:py-2 text-gray-600 hover:text-orange-600 transition-colors" data-nav="appointments" title="Appointments">
+                    <i class="fas fa-calendar text-2xl md:text-lg"></i>
+                    <span class="absolute -top-2 right-1/3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                    <span class="text-xs mt-1 md:mt-2">Bookings</span>
+                </button>
+
+                <!-- Profile -->
+                <button class="nav-item flex flex-col items-center justify-center h-full md:h-auto md:py-2 text-gray-600 hover:text-orange-600 transition-colors" data-nav="profile" title="Profile">
+                    <i class="fas fa-user text-2xl md:text-lg"></i>
+                    <span class="text-xs mt-1 md:mt-2">Profile</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // ====== Modal Management ======
+        const bookingModal = document.getElementById('bookingModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelBookingBtn = document.getElementById('cancelBookingBtn');
+        const bookingForm = document.getElementById('bookingForm');
+
+        // Open modal
+        function openBookingModal() {
+            bookingModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close modal
+        function closeBookingModal() {
+            bookingModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Modal event listeners
+        closeModalBtn.addEventListener('click', closeBookingModal);
+        cancelBookingBtn.addEventListener('click', closeBookingModal);
+
+        // Click outside modal to close
+        bookingModal.addEventListener('click', (e) => {
+            if (e.target === bookingModal) {
+                closeBookingModal();
+            }
+        });
+
+        // Form submission
+        bookingForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('✅ Booking confirmed! You will receive a confirmation email shortly.');
+            closeBookingModal();
+            bookingForm.reset();
+        });
+
+        // Open modal when clicking View Details
+        document.querySelectorAll('.clinic-card .btn-primary').forEach(btn => {
+            btn.addEventListener('click', openBookingModal);
+        });
+
+        // ====== Filter Pill Functionality ======
+        const filterPills = document.querySelectorAll('.filter-pill');
+
+        filterPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                filterPills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                console.log('Filter applied:', pill.getAttribute('data-filter'));
+            });
+        });
+
+        // ====== Bottom Navigation ======
+        const navItems = document.querySelectorAll('.nav-item');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                const navType = item.getAttribute('data-nav');
+                console.log('Navigation to:', navType);
+            });
+        });
+
+        // ====== Search Functionality ======
+        const searchInput = document.getElementById('searchInput');
+        
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            console.log('Searching for:', searchTerm);
+            // Implementation: Filter clinics based on search term
+        });
+
+        // ====== Smooth Scroll Behavior ======
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // ====== Initial Console Messages ======
+        console.log('%cYinyang Care - TCM Marketplace', 'font-size: 16px; font-weight: bold; color: #ea580c;');
+        console.log('Ready for React/Vue integration');
+    </script>
+</body>
 </html>
